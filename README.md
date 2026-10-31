@@ -1,17 +1,36 @@
-# iOS Offline Messenger Simulator — QA Case Study
+# iOS Offline Messenger — Commercial QA Project
 
-> Sanitized real-device QA case covering acceptance testing, exploratory testing, persistence, offline behavior, data isolation, hidden-editor workflows, and reproducible iOS crash analysis.
+> Commercial manual QA engagement covering real-device iOS acceptance testing, exploratory testing, offline/persistence behavior, application-data isolation, and reproducible crash investigation.
 
 <p align="center">
   <img src="https://img.shields.io/badge/iOS-18.2-black?style=for-the-badge&logo=apple&logoColor=white" alt="iOS 18.2">
-  <img src="https://img.shields.io/badge/Real_Device-iPhone_13-555555?style=for-the-badge" alt="iPhone 13">
+  <img src="https://img.shields.io/badge/Real_Device-iPhone_13-555555?style=for-the-badge&logo=apple&logoColor=white" alt="iPhone 13">
   <img src="https://img.shields.io/badge/Manual_QA-Acceptance_%2B_Exploratory-6E40C9?style=for-the-badge" alt="Manual QA">
   <img src="https://img.shields.io/badge/Crash_Analysis-.ips_%2B_syslog-0A84FF?style=for-the-badge" alt="Crash analysis">
 </p>
 
-> **Disclaimer:** this repository documents testing of an unofficial local/offline messenger simulator with a Telegram-like UI. It is not affiliated with, endorsed by, or distributed by Telegram. Product data and runtime evidence have been sanitized for public portfolio use.
+| Scope | Evidence | QA focus |
+|---|---|---|
+| iOS messenger UI · local data · offline mode · hidden editor · persistence | Executed test cases · bug reports · screenshots · syslog · `.ips` crash reports | Acceptance · exploratory · negative/boundary checks · defect isolation · crash analysis |
 
-## Result at a glance
+**Start here:** [final report](docs/REPORT.md) · [test cases](test_cases/TEST_CASES.md) · [bug reports](bugs/BUG_REPORTS.md) · [crash analysis](docs/CRASH_ANALYSIS.md) · [evidence policy](evidence/README.md)
+
+## Project profile
+
+| Parameter | Value |
+|---|---|
+| Product | Local/offline iOS messenger simulator with a Telegram-like UI |
+| Work type | Commercial manual mobile QA |
+| Role | QA Engineer |
+| Device | Physical iPhone 13 (`iPhone14,5`) |
+| OS | iOS 18.2 |
+| Application | 13.1.1, build 17 |
+| Test focus | Acceptance, exploratory, persistence, offline, isolation, crash investigation |
+| Test cycle | October 2026 |
+
+The application uses a separate bundle and local data store. It does not require login, registration, backend synchronization, or access to a real Telegram account.
+
+## Results in numbers
 
 | Metric | Result |
 |---|---:|
@@ -20,42 +39,35 @@
 | FAIL | 5 |
 | NOT RUN | 16 |
 | BLOCKED | 0 |
-| Mandatory acceptance checks | 8 / 9 passed fully |
+| Mandatory acceptance checks | 8 / 9 fully passed |
 | Confirmed defects | 5 |
-| Reproducible crash | 2 / 2 identical signatures |
+| Controlled crash reproductions | 2 / 2 |
 
-**Start here:** [QA report](docs/REPORT.md) · [test cases](test_cases/TEST_CASES.md) · [bug reports](bugs/BUG_REPORTS.md) · [crash analysis](docs/CRASH_ANALYSIS.md) · [scope](docs/SCOPE.md)
+The `NOT RUN` cases are retained deliberately: they are planned boundary, backup, permission, or timing checks that were not fully executed in this test cycle. They were not converted into synthetic PASS results.
 
-## What was tested
+## Key findings
 
-The application is a local-only iOS messenger simulator. It does not require login, registration, server synchronization, or a real Telegram account. The acceptance scope covered:
-
-- chat list UI: avatar, name, last-message preview, time, unread counter;
-- chat history: dates, timestamps, outgoing-message checkmarks;
-- correspondent states: online, recently seen, animated typing;
-- sending local text messages;
-- correspondent profile card;
-- message context menu and text selection;
-- settings and own profile presentation;
-- chat wallpaper change/reset;
-- persistence after force-close/relaunch;
-- optional hidden service editor for profiles, chats, messages, timestamps, checkmarks and statuses.
+1. **BUG-05 — High / P1:** opening a fully empty correspondent profile produces a deterministic application crash. Two independent `.ips` reports matched on exception, faulting thread, framework sequence, and frame offsets.
+2. **BUG-01 — Medium / P1:** the required partial text-selection flow is unavailable because long press opens the context menu without standard iOS selection handles.
+3. **BUG-04 — Medium / P1:** editing the already-created own profile does not complete; name, birth-date, and avatar changes remain on an endless loader.
+4. **BUG-03 — Medium / P2:** the Reply action sends a normal message without preserving visible source-message context.
+5. **BUG-02 — Medium / P2:** a whole-chat delete action is exposed from a single-message selection context, creating destructive-action ambiguity.
 
 ## QA approach
 
-1. Install and run a separately signed build on a physical iPhone.
-2. Confirm that the test build coexists with the real Telegram app and cannot see its data.
-3. Execute mandatory acceptance checks first.
-4. Extend coverage with exploratory, negative, boundary, persistence and offline checks.
-5. Link failed scenarios to concrete defect IDs.
-6. For the crash defect, reproduce twice, collect live syslog and `.ips` reports, compare signatures and identify the top faulting framework.
-7. Keep raw crash artifacts private; publish only sanitized technical findings.
+- installed and validated a separately signed build on a physical iPhone;
+- verified coexistence and data isolation between the simulator and the real Telegram application;
+- executed the nine mandatory acceptance checks first;
+- expanded coverage with exploratory, negative, boundary, persistence, stability, and offline checks;
+- linked failed test cases to concrete defect IDs;
+- reproduced the crash twice under controlled conditions;
+- captured live syslog and two `.ips` reports;
+- compared crash signatures without claiming an unsupported source-level root cause;
+- kept sensitive runtime artifacts private while preserving sanitized technical conclusions publicly.
 
-## Key engineering finding
+## Crash investigation
 
-The strongest defect was a deterministic crash when opening a correspondent profile after all profile data had been removed through the service editor.
-
-Two independent crash reports from the same build produced the same signature:
+The strongest technical finding was **BUG-05**. The failure was reproduced twice on the same build and device.
 
 ```text
 Exception: EXC_BREAKPOINT
@@ -66,30 +78,32 @@ Reproduction: 2 / 2
 Signature match: identical
 ```
 
-Exact source-level attribution was intentionally not claimed because the matching dSYM was not available. See [CRASH_ANALYSIS.md](docs/CRASH_ANALYSIS.md).
+The crash was intentionally **not** attributed to a specific Swift function or source line because the matching dSYM was unavailable. Stable offsets establish a reproducible signature, not a defensible source-level cause.
 
-## Repository structure
+[Read the crash analysis →](docs/CRASH_ANALYSIS.md)
 
-```text
-.
-├── README.md
-├── bugs/
-│   └── BUG_REPORTS.md
-├── docs/
-│   ├── CRASH_ANALYSIS.md
-│   ├── LEGEND.md
-│   ├── REPORT.md
-│   ├── SCOPE.md
-│   └── TEST_ENVIRONMENT.md
-├── evidence/
-│   └── README.md
-└── test_cases/
-    └── TEST_CASES.md
-```
+## Documentation navigation
 
-## Public evidence policy
+| Document | Purpose |
+|---|---|
+| [REPORT.md](docs/REPORT.md) | Final execution summary and release-readiness assessment |
+| [SCOPE.md](docs/SCOPE.md) | Mandatory acceptance scope, exploratory extensions, exclusions |
+| [TEST_ENVIRONMENT.md](docs/TEST_ENVIRONMENT.md) | Device, build, tooling, and regression context |
+| [TEST_CASES.md](test_cases/TEST_CASES.md) | 61-case execution matrix with status and defect traceability |
+| [BUG_REPORTS.md](bugs/BUG_REPORTS.md) | Full reports for BUG-01…BUG-05 |
+| [CRASH_ANALYSIS.md](docs/CRASH_ANALYSIS.md) | Sanitized iOS crash investigation and handoff notes |
+| [LEGEND.md](docs/LEGEND.md) | Status, severity, priority, and evidence conventions |
+| [evidence/README.md](evidence/README.md) | Evidence index and public-publication policy |
 
-Screenshots, raw syslog and `.ips` crash files are not published because they may contain client data, local identifiers or runtime metadata. The repository keeps sanitized observations, reproduction steps, crash signatures and artifact mapping instead.
+## Confidentiality
+
+This public repository is a sanitized portfolio version of the delivered QA work. It does not contain client-identifying profile/message data, raw device identifiers, signing-team information, raw syslog, or raw `.ips` files.
+
+The product is an **unofficial Telegram-like local messenger simulator**. This repository is not affiliated with, endorsed by, or distributed by Telegram.
+
+## Status
+
+Documentation is frozen at the final build-17 QA result. The public case preserves the execution logic, defect traceability, and technical conclusions while omitting sensitive raw evidence.
 
 ---
 
