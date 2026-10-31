@@ -1,38 +1,46 @@
-# Test Environment
+# Environment & Tools
 
-## Device
+## Test environment
 
-- Physical device: **iPhone 13** (`iPhone14,5`)
-- OS: **iOS 18.2**
-- Test type: real-device manual testing
+| Parameter | Value |
+|---|---|
+| Device | Physical iPhone 13 (`iPhone14,5`) |
+| OS | iOS 18.2 |
+| Application | 13.1.1, build 17 |
+| Installation | Sideloaded / development-signed build |
+| Test type | Real-device manual testing |
+| Data model | Local/offline application data |
+| Isolation | Dedicated application bundle, separate from the installed real Telegram app |
 
-## Application build
+## Tooling
 
-- App version: **13.1.1**
-- Build: **17**
-- Installation: sideloaded/development-signed test build
-- Isolation: dedicated bundle identifier, separate from the installed real Telegram application
-
-## Tooling used during the QA session
-
-- `libimobiledevice` / `idevice*` tooling for device communication and logs
-- `idevicesyslog` for live runtime logging
-- iOS `.ips` crash reports for post-crash analysis
-- command-line inspection of crash-report JSON
-- Google Sheets / Docs for execution tracking and delivery artifacts
+| Tool / artifact | Purpose |
+|---|---|
+| `libimobiledevice` / `idevice*` | Device communication and iOS diagnostics |
+| `idevicesyslog` | Live runtime log capture during controlled reproduction |
+| iOS `.ips` reports | Native crash evidence |
+| Python / CLI JSON inspection | Crash-report field extraction and signature comparison |
+| Google Sheets | Test-case execution and defect traceability |
+| Google Docs | Final QA delivery report |
+| GitHub | Sanitized public portfolio documentation |
 
 ## Environment-specific verification
 
-The following were explicitly checked:
+The following checks were performed explicitly:
 
-- the real Telegram app and the simulator can coexist on the same device;
+- the real Telegram application and the simulator can coexist on the same device;
 - the simulator does not expose or reuse the real Telegram application's chats or profile data;
 - repeated cold starts of build 17 are stable;
-- local functionality remains available without network access;
-- sent messages and wallpaper selection persist after a full application restart.
+- local chat functionality remains available without network access;
+- sent messages persist after a full application restart;
+- selected wallpaper persists after a full application restart.
 
-## Previous-build regression context
+## Regression context
 
-An earlier build exhibited repeated startup crashes. Build 17 was therefore treated as a regression candidate and repeatedly cold-started before functional acceptance testing continued.
+An earlier build exhibited repeated startup crashes. Build 17 was therefore treated as a regression candidate before the functional acceptance run continued.
 
-The public case does not include previous-build raw crash artifacts because the goal is to document the QA decision path, not to publish client runtime data.
+Repeated cold starts on build 17 did not reproduce the earlier startup failure, which helped separate the resolved launch-stability problem from the later profile-specific crash documented as BUG-05.
+
+## Evidence handling
+
+The original QA delivery included raw device-side artifacts where needed. The public repository intentionally keeps only sanitized conclusions and traceability because raw syslog and `.ips` files can expose device, container, signing, and client runtime metadata.
