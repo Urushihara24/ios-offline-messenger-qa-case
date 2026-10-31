@@ -93,7 +93,7 @@ The crash was intentionally **not** attributed to a specific Swift function or s
 | [BUG_REPORTS.md](bugs/BUG_REPORTS.md) | Full reports for BUG-01…BUG-05 |
 | [CRASH_ANALYSIS.md](docs/CRASH_ANALYSIS.md) | Sanitized iOS crash investigation and handoff notes |
 | [LEGEND.md](docs/LEGEND.md) | Status, severity, priority, and evidence conventions |
-| [evidence/README.md](evidence/README.md) | Evidence index and public-publication policy |
+| [evidence/README.md](evidence/README.md) | Evidence index and public evidence policy |
 | [CHANGELOG.md](CHANGELOG.md) | Public portfolio release history and frozen-case status |
 
 ## Confidentiality
