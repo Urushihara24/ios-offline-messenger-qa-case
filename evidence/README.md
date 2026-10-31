@@ -1,42 +1,68 @@
-# Evidence Policy
+# Evidence Index & Publication Policy
 
-This public repository intentionally does **not** contain raw client screenshots, live syslog or `.ips` crash reports.
+This public repository intentionally excludes raw client screenshots, live syslog, and native `.ips` crash reports.
 
-## Evidence captured in the original QA delivery
+The original QA delivery contained the evidence required for defect reproduction and developer handoff. The public portfolio version preserves the evidence map and technical conclusions without exposing sensitive runtime data.
 
-| Defect / check | Evidence type | Public handling |
-|---|---|---|
-| Context menu | Screenshot | Omitted from public repo |
-| BUG-01 — text selection | Screenshot | Omitted from public repo |
-| BUG-02 — destructive chat action | Screenshot | Omitted from public repo |
-| BUG-05 — empty-profile crash | Live syslog | Sanitized findings documented in `CRASH_ANALYSIS.md` |
-| BUG-05 — empty-profile crash | Crash report #1 (`.ips`) | Raw file omitted |
-| BUG-05 — empty-profile crash | Crash report #2 (`.ips`) | Raw file omitted |
+## Evidence index
+
+| Defect / check | Evidence type | Original delivery | Public handling |
+|---|---|---|---|
+| Context-menu verification | Screenshot | Included | Raw image omitted |
+| BUG-01 — text selection | Screenshot | Included | Raw image omitted; behavior documented |
+| BUG-02 — destructive chat action | Screenshot | Included | Raw image omitted; behavior documented |
+| BUG-03 — reply context | Execution record | Included in test run | No separate public screenshot |
+| BUG-04 — own-profile loader | Execution record | Included in test run | No separate public screenshot |
+| BUG-05 — empty-profile crash | Live syslog | Included | Raw log omitted; sanitized findings published |
+| BUG-05 — empty-profile crash | Crash report #1 (`.ips`) | Included | Raw file omitted |
+| BUG-05 — empty-profile crash | Crash report #2 (`.ips`) | Included | Raw file omitted |
 
 ## Why raw artifacts are excluded
 
-Real-device artifacts can contain information that is unnecessary for a public portfolio:
+Real-device evidence can contain information that is unnecessary for a public portfolio:
 
-- local filesystem/container paths;
+- local filesystem and application-container paths;
 - signing/team identifiers;
 - device/runtime identifiers;
-- client-created profile/message data;
-- timestamps and other environment metadata.
+- client-created profile or message data;
+- precise timestamps and environment metadata;
+- other runtime details unrelated to evaluating the QA work.
 
-Publishing those files would add privacy and confidentiality risk without materially improving the portfolio case.
+Publishing those files would add confidentiality risk without materially improving the portfolio case.
 
 ## What is preserved publicly
 
 The repository retains the information needed to evaluate the QA work:
 
-- test scenario and status;
-- defect reproduction steps;
-- Expected vs Actual;
+- test scenario and execution status;
+- reproduction steps;
+- Actual vs Expected;
 - Severity / Priority;
 - test-case ↔ defect traceability;
 - reproducibility;
-- exception/signal and faulting-thread data;
+- evidence type;
+- exception/signal and faulting-thread data for BUG-05;
 - crash-signature comparison;
 - explicit statement of what cannot be concluded without dSYM symbolication.
 
-See [Crash Analysis](../docs/CRASH_ANALYSIS.md) for the sanitized technical evidence.
+## Crash evidence chain
+
+For BUG-05, the private evidence chain was:
+
+```text
+controlled reproduction
+        ↓
+live syslog capture
+        ↓
+2 native .ips reports
+        ↓
+matching exception / thread / frame sequence
+        ↓
+stable reproducible crash signature
+```
+
+See [Crash Analysis](../docs/CRASH_ANALYSIS.md) for the sanitized technical investigation.
+
+## Portfolio rule
+
+The public repository documents **how the conclusion was reached** without pretending that private raw evidence is safe or necessary to publish.
