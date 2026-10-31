@@ -1,6 +1,6 @@
-# Test Cases — Build 17
+# Executed Test Cases — Build 17
 
-## Summary
+## Execution snapshot
 
 | Metric | Count |
 |---|---:|
@@ -10,7 +10,11 @@
 | NOT RUN | 16 |
 | BLOCKED | 0 |
 
-The table below is a sanitized execution matrix derived from the final QA run. Detailed client-specific values and raw evidence are intentionally omitted.
+This is the sanitized execution matrix from the final QA run. Client-specific values and raw evidence are intentionally omitted, while execution status, observed result, and defect traceability are preserved.
+
+`NOT RUN` means the scenario was planned but not fully executed in this test cycle; it is not treated as a synthetic PASS.
+
+## Test execution
 
 | ID | Area | Scenario | Priority | Type | Status | Result / note | Defect |
 |---|---|---|---|---|---|---|---|
@@ -78,8 +82,23 @@ The table below is a sanitized execution matrix derived from the final QA run. D
 
 ## Acceptance mapping
 
-The mandatory acceptance result is **8/9 fully passed**. IOS-018 is the only direct acceptance failure. IOS-058–061 are additional exploratory/optional defects discovered beyond the nine mandatory checks.
+The mandatory acceptance result is **8 / 9 fully passed**.
+
+- IOS-018 / BUG-01 is the only direct failure among the nine mandatory checks.
+- IOS-058–061 are additional exploratory/optional defects discovered beyond the mandatory acceptance list.
+
+## Defect traceability
+
+| Failed case | Defect |
+|---|---|
+| IOS-018 | [BUG-01](../bugs/BUG_REPORTS.md#bug-01--partial-message-text-selection-is-unavailable) |
+| IOS-058 | [BUG-03](../bugs/BUG_REPORTS.md#bug-03--reply-loses-source-message-context) |
+| IOS-059 | [BUG-02](../bugs/BUG_REPORTS.md#bug-02--whole-chat-delete-is-exposed-from-single-message-context) |
+| IOS-060 | [BUG-04](../bugs/BUG_REPORTS.md#bug-04--editing-own-profile-hangs-on-endless-loader) |
+| IOS-061 | [BUG-05](../bugs/BUG_REPORTS.md#bug-05--fully-empty-correspondent-profile-causes-application-crash) |
 
 ## Evidence mapping
 
-The original private delivery included screenshots for BUG-01/BUG-02 and syslog + two `.ips` reports for BUG-05. See [evidence policy](../evidence/README.md).
+The original private delivery included screenshots for BUG-01/BUG-02 and live syslog + two native `.ips` reports for BUG-05.
+
+Public handling and evidence rationale: [evidence/README.md](../evidence/README.md).
