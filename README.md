@@ -94,6 +94,7 @@ The crash was intentionally **not** attributed to a specific Swift function or s
 | [CRASH_ANALYSIS.md](docs/CRASH_ANALYSIS.md) | Sanitized iOS crash investigation and handoff notes |
 | [LEGEND.md](docs/LEGEND.md) | Status, severity, priority, and evidence conventions |
 | [evidence/README.md](evidence/README.md) | Evidence index and public-publication policy |
+| [CHANGELOG.md](CHANGELOG.md) | Public portfolio release history and frozen-case status |
 
 ## Confidentiality
 
@@ -103,7 +104,7 @@ The product is an **unofficial Telegram-like local messenger simulator**. This r
 
 ## Status
 
-Documentation is frozen at the final build-17 QA result. The public case preserves the execution logic, defect traceability, and technical conclusions while omitting sensitive raw evidence.
+Documentation is frozen at the final build-17 QA result. The public case preserves the execution logic, defect traceability, and technical conclusions while omitting sensitive raw evidence. See [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
